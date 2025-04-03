@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.8.2.7.js"></script>
+
+    <title>Gabota e Janzo</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+      }
+      
+      body {
+        background-color: #f5f5f5;
+      }
+      
+      .header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 120px;
+        background: linear-gradient(135deg, #1e3c72 0%, #e52d27 100%);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        margin-bottom: 30px;
+      }
+      
+      .title {
+        color: white;
+        font-size: 3rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+      }
+      
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      
+      .json-container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #1e3c72;
+      }
+      
+      pre {
+        white-space: pre-wrap;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        color: #333;
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+    </style>
+
+</head>
+
+<body>
+    <script>
+        const showMessage = (msg) => {
+            var message = document.createElement('div');
+            message.innerText = msg;
+            document.getElementById('messages').appendChild(message);
+        };
+
+        let pubnub;
+
+        const setupPubNub = () => {
+            // configuração
+            pubnub = new PubNub({
+                publishKey: "pub-c-49753194-5bdb-4ebe-a1ed-d81012baf4af",
+                subscribeKey: "sub-c-3c4dffb7-433f-4b29-adad-588e97e9c5ed",
+                userId: "pub nub index"
+            });
+            
+            // inscrição no canal
+            const channel = pubnub.channel('meu_canal');
+            const subscription = channel.subscription();
+
+            subscription.onMessage = (messageEvent) => {
+                console.log(messageEvent.message)
+                showMessage(messageEvent.message);
+            };
+            
+            subscription.subscribe();
+        };
+
+        window.onload = setupPubNub;
+    </script>
+
+
+  <header class="header">
+    <h1 class="title">Gabota e Janzo</h1>
+  </header>
+  
+  <div class="container">
+    <div class="json-container">
+      <pre id="messages">
+      </pre>
+    </div>
+  </div>
+
+</body>
+
+</html>
+
